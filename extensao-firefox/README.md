@@ -1,16 +1,16 @@
-# Extensão Firefox — Minha Nova Aba
+# Firefox Extension — Personal New Tab
 
-Esta extensão substitui a nova aba diretamente no Firefox e mostra a página publicada em:
+This Firefox-specific extension replaces Firefox's new-tab page and displays the website published at:
 
 `https://badlakes.github.io/new_tab/`
 
-Por carregar essa página dentro da extensão, as atualizações enviadas ao GitHub Pages aparecem automaticamente. O GIF é carregado pela própria extensão para evitar problemas de fundo dentro do quadro incorporado. Para trocar o endereço no futuro, edite apenas `src` e a URL do GIF em `new-tab.html`.
+Because it loads the website inside the extension, updates pushed to GitHub Pages appear automatically. The GIF is loaded by the extension itself to avoid background issues inside the embedded page. To change the website later, edit `src` and the GIF URL in `new-tab.html`.
 
-## Testar no Firefox
+## Test in Firefox
 
-1. Digite `about:debugging#/runtime/this-firefox` na barra de endereço.
-2. Clique em **Load Temporary Add-on…**.
-3. Selecione o arquivo `manifest.json` desta pasta.
-4. Abra uma nova aba com `Ctrl+T`.
+1. Type `about:debugging#/runtime/this-firefox` in the address bar.
+2. Click **Load Temporary Add-on…**.
+3. Select this folder's `manifest.json` file.
+4. Open a new tab with `Ctrl+T`.
 
-O teste temporário é removido ao fechar o Firefox. Para instalar a extensão de forma permanente no Firefox normal, é necessário gerar um pacote `.xpi` assinado pelo Mozilla Add-ons; não é preciso publicar a extensão para todo mundo, ela pode ser assinada como **unlisted**.
+The temporary add-on is removed when Firefox closes. To install it permanently in standard Firefox, create an `.xpi` package and have it signed through Mozilla Add-ons; it can remain **unlisted** rather than publicly listed.
