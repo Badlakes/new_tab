@@ -1,18 +1,27 @@
 {
   "manifest_version": 3,
   "name": "new_tab_badlakes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Abre a página de nova aba hospedada no GitHub Pages.",
   "chrome_url_overrides": {
     "newtab": "new-tab.html"
   },
+  "permissions": ["geolocation"],
+  "host_permissions": [
+    "https://api.open-meteo.com/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://api.bigdatacloud.net/*"
+  ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://badlakes.github.io; img-src https://badlakes.github.io;"
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://badlakes.github.io; img-src https://badlakes.github.io; connect-src https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.bigdatacloud.net;"
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "minha-nova-aba-badlakes@local",
-      "strict_min_version": "109.0"
+      "id": "nova-aba@seunome",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["locationInfo"]
+      }
     }
   }
 }
