@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nova aba</title>
+  <style>
+    :root {
+      /* Troque pelo nome/caminho do seu GIF. Ex.: url("meu-gif.gif") */
+      --papel-de-parede: url("background.gif");
+      --cor-fundo: #16131f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: #fff;
+      background-color: var(--cor-fundo);
+      background-image:
+        linear-gradient(120deg, rgba(8, 6, 14, .18), rgba(8, 6, 14, .05)),
+        var(--papel-de-parede);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .atalhos {
+      display: grid;
+      grid-template-columns: repeat(6, 78px);
+      gap: 18px 12px;
+      width: max-content;
+      padding: 28px;
+    }
+
+    .atalho {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 78px;
+      padding: 8px 4px;
+      border-radius: 12px;
+      color: inherit;
+      text-align: center;
+      text-decoration: none;
+      text-shadow: 0 2px 4px #000;
+      outline: none;
+      transition: background .16s ease, transform .16s ease;
+    }
+
+    .atalho:hover,
+    .atalho:focus-visible {
+      background: rgba(255, 255, 255, .22);
+      transform: translateY(-3px);
+    }
+
+    .icone {
+      position: relative;
+      display: grid;
+      width: 62px;
+      height: 62px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .42);
+      border-radius: 16px;
+      background: rgba(20, 20, 29, .58);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .28), inset 0 1px rgba(255, 255, 255, .15);
+      backdrop-filter: blur(8px);
+      font-size: 31px;
+    }
+
+    .favicon {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35));
+    }
+
+    .favicon:not([src]) { display: none; }
+
+    .reserva[hidden] { display: none; }
+
+    .nome {
+      width: 100%;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 520px) {
+      .atalhos { grid-template-columns: repeat(3, 96px); padding: 18px; gap: 12px; }
+      .atalho { width: 96px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="atalhos" aria-label="Atalhos rápidos"></main>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const grade = document.querySelector('.atalhos');
+      const atalhos = JSON.parse(document.querySelector('#atalhos-json').textContent);
+
+      atalhos.forEach(({ nome, url }) => {
+        const atalho = document.createElement('a');
+        atalho.className = 'atalho';
+        atalho.href = url;
+        atalho.target = '_blank';
+        atalho.rel = 'noopener';
+
+        const icone = document.createElement('span');
+        icone.className = 'icone';
+
+        const reserva = document.createElement('span');
+        reserva.className = 'reserva';
+        reserva.textContent = nome.slice(0, 1).toUpperCase(); // aparece só se o favicon falhar
+        icone.append(reserva);
+
+        const favicon = document.createElement('img');
+        favicon.className = 'favicon';
+        favicon.alt = '';
+        favicon.src = `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(url)}`;
+        favicon.addEventListener('load', () => { reserva.hidden = true; });
+        favicon.addEventListener('error', () => favicon.remove());
+        icone.append(favicon);
+
+        const nomeExibido = document.createElement('span');
+        nomeExibido.className = 'nome';
+        nomeExibido.textContent = nome;
+
+        atalho.append(icone, nomeExibido);
+        grade.append(atalho);
+      });
+    });
+  </script>
+
+  <!-- Edite somente esta lista: cada item precisa ter "nome" e "url". -->
+  <script id="atalhos-json" type="application/json">
+[
+  { "nome": "Google",       "url": "https://www.google.com" },
+  { "nome": "Uma DB",       "url": "https://uma.pure-db.com/en-us/search" },
+  { "nome": "Gmail",        "url": "https://mail.google.com" },
+  { "nome": "WhatsApp",     "url": "https://www.whatsapp.com" },
+  { "nome": "GitHub",       "url": "https://github.com" },
+  { "nome": "Reddit",       "url": "https://www.reddit.com" },
+  { "nome": "Netflix",      "url": "https://www.netflix.com" },
+  { "nome": "Spotify",      "url": "https://open.spotify.com" },
+  { "nome": "Discord",      "url": "https://discord.com/app" },
+  { "nome": "Twitch",       "url": "https://www.twitch.tv" },
+  { "nome": "I",            "url": "https://drive.google.com/drive/u/0/folders/1EVkQSOgyuH1eOux60pj1v8EGmKMmKn9p" },
+  { "nome": "OwnBear",      "url": "https://www.owlbear.rodeo/room/ugaA_tq5S9wu/The%20Bonny%20Flap" }
+]
+  </script>
+</body>
+</html>
