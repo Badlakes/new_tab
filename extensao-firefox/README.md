@@ -4,7 +4,7 @@ Esta extensão substitui a nova aba diretamente no Firefox e mostra a página pu
 
 `https://badlakes.github.io/new_tab/`
 
-Por carregar essa página dentro da extensão, as atualizações enviadas ao GitHub Pages aparecem automaticamente. Para trocar o endereço no futuro, edite apenas `src` em `new-tab.html`.
+Por carregar essa página dentro da extensão, as atualizações enviadas ao GitHub Pages aparecem automaticamente. O GIF é carregado pela própria extensão para evitar problemas de fundo dentro do quadro incorporado. Para trocar o endereço no futuro, edite apenas `src` e a URL do GIF em `new-tab.html`.
 
 ## Testar no Firefox
 

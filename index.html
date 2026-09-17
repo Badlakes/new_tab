@@ -29,6 +29,12 @@
       background-attachment: fixed;
     }
 
+    /* Usado apenas pela extensão: o GIF fica na camada externa dela. */
+    body.incorporado {
+      background-color: transparent;
+      background-image: none;
+    }
+
     .atalhos {
       display: grid;
       grid-template-columns: repeat(6, 78px);
@@ -105,6 +111,10 @@
   <main class="atalhos" aria-label="Atalhos rápidos"></main>
 
   <script>
+    if (new URLSearchParams(window.location.search).has('incorporado')) {
+      document.body.classList.add('incorporado');
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       const grade = document.querySelector('.atalhos');
       const atalhos = JSON.parse(document.querySelector('#atalhos-json').textContent);

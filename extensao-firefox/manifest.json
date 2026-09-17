@@ -7,7 +7,7 @@
     "newtab": "new-tab.html"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://badlakes.github.io;"
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://badlakes.github.io; img-src https://badlakes.github.io;"
   },
   "browser_specific_settings": {
     "gecko": {
