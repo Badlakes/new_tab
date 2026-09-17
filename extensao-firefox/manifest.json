@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "",
+  "name": "new_tab_badlakes",
   "version": "1.0.0",
   "description": "Abre a página de nova aba hospedada no GitHub Pages.",
   "chrome_url_overrides": {
