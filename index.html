@@ -105,9 +105,242 @@
       .atalhos { grid-template-columns: repeat(3, 96px); padding: 18px; gap: 12px; }
       .atalho { width: 96px; }
     }
+
+
+    /* =========================Widget de clima========================= */
+
+  .clima {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 330px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 16px;
+    background: rgba(45, 45, 60, .88);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    z-index: 10;
+  }
+
+  .clima[hidden] {
+    display: none;
+  }
+
+  .clima-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .clima-cidade {
+    font-size: 13px;
+    opacity: .85;
+  }
+
+  .clima-menu-botao {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .clima-menu-botao:hover {
+    background: rgba(255, 255, 255, .15);
+  }
+
+  .clima-principal {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .clima-icone {
+    width: 70px;
+    height: 70px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(30, 20, 15, .85);
+    font-size: 38px;
+  }
+
+  .clima-temperatura {
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .clima-condicao {
+    margin-top: 4px;
+    font-size: 14px;
+    opacity: .8;
+  }
+
+  .clima-maxmin {
+    margin-left: auto;
+    align-self: flex-start;
+    font-size: 12px;
+    opacity: .8;
+    white-space: nowrap;
+  }
+
+  .clima-previsao {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+
+  .clima-hora {
+    min-width: 58px;
+    padding: 8px 5px;
+    border-radius: 9px;
+    background: rgba(20, 20, 30, .45);
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .clima-hora .icone {
+    margin: 4px 0;
+    font-size: 20px;
+  }
+
+  .clima-menu {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 10px;
+    width: 150px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 12px;
+    background: #292936;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+    z-index: 20;
+  }
+
+  .clima-menu[hidden] {
+    display: none;
+  }
+
+  .clima-menu button {
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .clima-menu button:hover {
+    background: rgba(255, 255, 255, .12);
+  }
+
+  /* Tamanhos */
+
+  .clima.small {
+    width: 260px;
+  }
+
+  .clima.small .clima-previsao {
+    display: none;
+  }
+
+  .clima.medium {
+    width: 330px;
+  }
+
+  .clima.large {
+    width: 350px;
+  }
+
+  .clima.large .clima-previsao {
+    display: flex;
+  }
+
+  /* Mobile */
+
+  @media (max-width: 520px) {
+    .clima {
+      bottom: 10px;
+      right: 10px;
+      width: calc(100vw - 20px);
+    }
+  }
   </style>
 </head>
 <body>
+
+  <section id="clima" class="clima medium" aria-label="Clima">
+
+    <div class="clima-topo">
+      <span id="clima-cidade" class="clima-cidade">
+        New York
+      </span>
+
+      <button
+        id="clima-menu-botao"
+        class="clima-menu-botao"
+        type="button"
+        aria-label="Opções do clima"
+      >
+        ⋯
+      </button>
+    </div>
+
+    <div class="clima-principal">
+
+      <div id="clima-icone" class="clima-icone">
+        ☀️
+      </div>
+
+      <div>
+        <div id="clima-temperatura" class="clima-temperatura">
+          --°C
+        </div>
+
+        <div id="clima-condicao" class="clima-condicao">
+          Carregando...
+        </div>
+      </div>
+
+      <div id="clima-maxmin" class="clima-maxmin">
+        ↑--° ↓--°
+      </div>
+
+    </div>
+
+    <div id="clima-previsao" class="clima-previsao"></div>
+
+    <div id="clima-menu" class="clima-menu" hidden>
+
+      <button type="button" data-tamanho="small">
+        Small
+      </button>
+
+      <button type="button" data-tamanho="medium">
+        Medium
+      </button>
+
+      <button type="button" data-tamanho="large">
+        Large
+      </button>
+
+      <button type="button" id="clima-detectar">
+        Detectar localização
+      </button>
+
+    </div>
+
+  </section>
+
   <main class="atalhos" aria-label="Atalhos rápidos"></main>
 
   <script>
@@ -148,7 +381,236 @@
         atalho.append(icone, nomeExibido);
         grade.append(atalho);
       });
+
+      // Fora do loop: rodam uma única vez.
+      aplicarTamanhoClima();
+      configurarMenuClima();
+      detectarLocalizacao();
     });
+
+    const clima = {
+      tamanho: localStorage.getItem('clima-tamanho') || 'medium',
+      cidade: localStorage.getItem('clima-cidade') || 'New York'
+    };
+
+    function aplicarTamanhoClima() {
+      const widget = document.querySelector('#clima');
+
+      widget.classList.remove('small', 'medium', 'large');
+      widget.classList.add(clima.tamanho);
+
+      localStorage.setItem('clima-tamanho', clima.tamanho);
+    }
+
+    function configurarMenuClima() {
+      const botao = document.querySelector('#clima-menu-botao');
+      const menu = document.querySelector('#clima-menu');
+
+      botao.addEventListener('click', event => {
+        event.stopPropagation();
+        menu.hidden = !menu.hidden;
+      });
+
+      document.addEventListener('click', () => {
+        menu.hidden = true;
+      });
+
+      menu.addEventListener('click', event => {
+        event.stopPropagation();
+      });
+
+      menu.querySelectorAll('[data-tamanho]').forEach(botao => {
+        botao.addEventListener('click', () => {
+          clima.tamanho = botao.dataset.tamanho;
+          aplicarTamanhoClima();
+          menu.hidden = true;
+        });
+      });
+
+      document.querySelector('#clima-detectar').addEventListener(
+        'click',
+        detectarLocalizacao
+      );
+    }
+
+    function detectarLocalizacao() {
+      if (!navigator.geolocation) {
+        usarFallbackClima();
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        posicao => {
+          const { latitude, longitude } = posicao.coords;
+          buscarClima(latitude, longitude);
+        },
+
+        () => {
+          usarFallbackClima();
+        },
+
+        {
+          enableHighAccuracy: false,
+          timeout: 8000,
+          maximumAge: 30 * 60 * 1000
+        }
+      );
+    }
+
+    function usarFallbackClima() {
+      clima.cidade = 'New York';
+      localStorage.setItem('clima-cidade', clima.cidade);
+
+      document.querySelector('#clima-cidade').textContent = clima.cidade;
+
+      buscarClimaPorCidade('New York');
+    }
+
+    // =====================Fetch do clima (Open-Meteo)=====================
+
+    // Tabela de códigos WMO -> [emoji, descrição em pt-BR]
+    const CODIGOS_CLIMA = {
+      0: ['☀️', 'Céu limpo'],
+      1: ['🌤️', 'Poucas nuvens'],
+      2: ['⛅', 'Parcialmente nublado'],
+      3: ['☁️', 'Nublado'],
+      45: ['🌫️', 'Nevoeiro'],
+      48: ['🌫️', 'Nevoeiro com geada'],
+      51: ['🌦️', 'Garoa fraca'],
+      53: ['🌦️', 'Garoa'],
+      55: ['🌧️', 'Garoa forte'],
+      56: ['🌧️', 'Garoa congelante'],
+      57: ['🌧️', 'Garoa congelante forte'],
+      61: ['🌧️', 'Chuva fraca'],
+      63: ['🌧️', 'Chuva'],
+      65: ['🌧️', 'Chuva forte'],
+      66: ['🌧️', 'Chuva congelante'],
+      67: ['🌧️', 'Chuva congelante forte'],
+      71: ['❄️', 'Neve fraca'],
+      73: ['❄️', 'Neve'],
+      75: ['❄️', 'Neve forte'],
+      77: ['❄️', 'Grãos de neve'],
+      80: ['🌦️', 'Pancadas fracas'],
+      81: ['🌧️', 'Pancadas de chuva'],
+      82: ['⛈️', 'Pancadas fortes'],
+      85: ['🌨️', 'Pancadas de neve'],
+      86: ['🌨️', 'Pancadas de neve fortes'],
+      95: ['⛈️', 'Trovoada'],
+      96: ['⛈️', 'Trovoada com granizo'],
+      99: ['⛈️', 'Trovoada com granizo forte']
+    };
+
+    function infoClima(codigo) {
+      return CODIGOS_CLIMA[codigo] || ['🌡️', 'Sem dados'];
+    }
+
+    function urlPrevisao(lat, lon) {
+      const parametros = new URLSearchParams({
+        latitude: lat,
+        longitude: lon,
+        current: 'temperature_2m,weather_code',
+        hourly: 'temperature_2m,weather_code',
+        daily: 'temperature_2m_max,temperature_2m_min',
+        timezone: 'auto',
+        forecast_days: '1'
+      });
+
+      return `https://api.open-meteo.com/v1/forecast?${parametros}`;
+    }
+
+    async function nomeDaCidade(lat, lon) {
+      try {
+        const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=pt`;
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
+
+        return dados.city || dados.locality || dados.principalSubdivision || 'Localização atual';
+      } catch {
+        return 'Localização atual';
+      }
+    }
+
+    async function buscarClima(lat, lon) {
+      try {
+        const nome = await nomeDaCidade(lat, lon);
+
+        clima.cidade = nome;
+        localStorage.setItem('clima-cidade', nome);
+        document.querySelector('#clima-cidade').textContent = nome;
+
+        const resposta = await fetch(urlPrevisao(lat, lon));
+        if (!resposta.ok) throw new Error('Falha na API de clima');
+
+        renderizarClima(await resposta.json());
+      } catch (erro) {
+        console.error('Erro ao buscar clima:', erro);
+        document.querySelector('#clima-condicao').textContent = 'Indisponível';
+      }
+    }
+
+    async function buscarClimaPorCidade(nomeCidade) {
+      try {
+        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nomeCidade)}&count=1&language=pt&format=json`;
+        const geoResposta = await fetch(geoUrl);
+        const geoDados = await geoResposta.json();
+        const local = geoDados.results?.[0];
+
+        if (!local) throw new Error('Cidade não encontrada');
+
+        clima.cidade = local.name;
+        localStorage.setItem('clima-cidade', local.name);
+        document.querySelector('#clima-cidade').textContent = local.name;
+
+        const resposta = await fetch(urlPrevisao(local.latitude, local.longitude));
+        if (!resposta.ok) throw new Error('Falha na API de clima');
+
+        renderizarClima(await resposta.json());
+      } catch (erro) {
+        console.error('Erro ao buscar clima por cidade:', erro);
+        document.querySelector('#clima-condicao').textContent = 'Indisponível';
+      }
+    }
+
+    function renderizarClima(dados) {
+      const [emojiAtual, textoAtual] = infoClima(dados.current.weather_code);
+
+      document.querySelector('#clima-icone').textContent = emojiAtual;
+      document.querySelector('#clima-temperatura').textContent =
+        `${Math.round(dados.current.temperature_2m)}°C`;
+      document.querySelector('#clima-condicao').textContent = textoAtual;
+
+      const max = Math.round(dados.daily.temperature_2m_max[0]);
+      const min = Math.round(dados.daily.temperature_2m_min[0]);
+      document.querySelector('#clima-maxmin').textContent = `↑${max}° ↓${min}°`;
+
+      const previsao = document.querySelector('#clima-previsao');
+      previsao.innerHTML = '';
+
+      const agora = new Date();
+      const indiceInicial = Math.max(
+        0,
+        dados.hourly.time.findIndex(t => new Date(t) >= agora)
+      );
+
+      dados.hourly.time
+        .slice(indiceInicial, indiceInicial + 6)
+        .forEach((horaIso, i) => {
+          const idx = indiceInicial + i;
+          const [emoji] = infoClima(dados.hourly.weather_code[idx]);
+          const temperatura = Math.round(dados.hourly.temperature_2m[idx]);
+          const hora = new Date(horaIso).getHours();
+
+          const bloco = document.createElement('div');
+          bloco.className = 'clima-hora';
+          bloco.innerHTML = `
+            <div>${hora}h</div>
+            <div class="icone">${emoji}</div>
+            <div>${temperatura}°</div>
+          `;
+          previsao.append(bloco);
+        });
+    }
+
   </script>
 
 
